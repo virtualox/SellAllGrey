@@ -1,3 +1,13 @@
+--[[
+	SellAllGrey
+	Original Author: VirtualOx
+	
+	Original Addon: https://github.com/virtualox/SellAllGrey
+
+	Licensed under GNU General Public Licence version 3.
+
+]]
+
 -- Localization table
 local L = {
     enUS = {
