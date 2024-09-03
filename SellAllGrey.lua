@@ -1,47 +1,46 @@
 --[[
-	SellAllGrey
-	Original Author: VirtualOx
-	
-	Original Addon: https://github.com/virtualox/SellAllGrey
+    SellAllGrey
+    Original Author: VirtualOx
 
-	Licensed under GNU General Public Licence version 3.
+    Original Addon: https://github.com/virtualox/SellAllGrey
 
+    Licensed under GNU General Public Licence version 3.
 ]]
 
 -- Localization table
 local L = {
     enUS = {
-        earned_message = "SellAllGrey: You earned %s from selling grey items."
+        earned_message = "You earned %s from selling grey items."
     },
     frFR = {
-        earned_message = "SellAllGrey : Vous avez gagné %s en vendant des objets gris."
+        earned_message = "Vous avez gagné %s en vendant des objets gris."
     },
     deDE = {
-        earned_message = "SellAllGrey: Du hast %s durch den Verkauf von grauen Gegenständen verdient."
+        earned_message = "Du hast %s durch den Verkauf von grauen Gegenständen verdient."
     },
     itIT = {
-        earned_message = "SellAllGrey: Hai guadagnato %s dalla vendita di oggetti grigi."
+        earned_message = "Hai guadagnato %s dalla vendita di oggetti grigi."
     },
     koKR = {
-        earned_message = "SellAllGrey: 회색 아이템을 판매하여 %s를 획득했습니다."
+        earned_message = "회색 아이템을 판매하여 %s를 획득했습니다."
     },
     zhCN = {
-        earned_message = "SellAllGrey: 你卖掉灰色物品获得了 %s."
+        earned_message = "你卖掉灰色物品获得了 %s."
     },
     zhTW = {
-        earned_message = "SellAllGrey: 你賣掉灰色物品獲得了 %s."
+        earned_message = "你賣掉灰色物品獲得了 %s."
     },
     ruRU = {
-        earned_message = "SellAllGrey: Вы заработали %s, продавая серые предметы."
+        earned_message = "Вы заработали %s, продавая серые предметы."
     },
     esES = {
-        earned_message = "SellAllGrey: Has ganado %s vendiendo objetos grises."
+        earned_message = "Has ganado %s vendiendo objetos grises."
     },
     esMX = {
-        earned_message = "SellAllGrey: Has ganado %s vendiendo objetos grises."
+        earned_message = "Has ganado %s vendiendo objetos grises."
     },
     ptBR = {
-        earned_message = "SellAllGrey: Você ganhou %s vendendo itens cinza."
+        earned_message = "Você ganhou %s vendendo itens cinza."
     }
 }
 
@@ -88,8 +87,10 @@ local function SellGreyItems()
     -- If there were any earnings, print the total earnings to the chat
     if totalEarnings > 0 then
         local formattedEarnings = FormatCurrency(totalEarnings)
-        -- Output to the chat window with yellow/amber color
-        print("|cffffff00" .. string.format(GetLocaleText("earned_message"), formattedEarnings) .. "|r")
+        -- Output to the chat window with addon name in yellow and message in white
+        local addonNameColor = "|cffffff00" -- Yellow color for addon name
+        local messageColor = "|cffffffff" -- White color for the rest of the message
+        print(addonNameColor .. "SellAllGrey:|r " .. messageColor .. string.format(GetLocaleText("earned_message"), formattedEarnings) .. "|r")
     end
 end
 
