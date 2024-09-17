@@ -2,8 +2,8 @@
 ## Title: SellAllGrey
 ## Notes: Automatically sells all grey items when interacting with a vendor.
 ## Author: VirtualOx
-## Version: 1.0.2
-## SavedVariables: SellAllGreyEnabled
+## Version: 1.1.0
+## SavedVariablesPerCharacter: SellAllGreyDB
 
 SellAllGrey.lua
 
