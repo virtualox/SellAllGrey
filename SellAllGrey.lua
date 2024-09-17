@@ -94,14 +94,121 @@ local function SellGreyItems()
     end
 end
 
+-- Saved Variables Table
+local SellAllGreyDB
+
+-- Create Minimap Button
+local function CreateMinimapButton()
+    local minimapButton = CreateFrame("Button", "SellAllGreyMinimapButton", Minimap)
+    minimapButton:SetFrameStrata("MEDIUM")
+    minimapButton:SetSize(31, 31)
+    minimapButton:SetFrameLevel(8)
+    minimapButton:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+
+    local minimapButtonTexture = minimapButton:CreateTexture(nil, "BACKGROUND")
+    minimapButtonTexture:SetTexture("Interface\\Icons\\INV_Misc_Coin_01") -- Using coin icon
+    minimapButtonTexture:SetSize(20, 20)
+    minimapButtonTexture:SetPoint("CENTER")
+
+    minimapButton:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
+
+    -- Position the button around the minimap
+    local function UpdateMinimapButtonPosition(angle)
+        local radius = 80
+        local x = radius * cos(angle)
+        local y = radius * sin(angle)
+        minimapButton:SetPoint("CENTER", Minimap, "CENTER", x, y)
+    end
+
+    -- Update button position
+    UpdateMinimapButtonPosition(SellAllGreyDB.minimapButtonAngle)
+
+    -- Allow dragging the button
+    minimapButton:SetScript("OnDragStart", function(self)
+        self:LockHighlight()
+        self:SetScript("OnUpdate", function(self)
+            local mx, my = Minimap:GetCenter()
+            local px, py = GetCursorPosition()
+            local scale = UIParent:GetEffectiveScale()
+            px, py = px / scale, py / scale
+            SellAllGreyDB.minimapButtonAngle = math.atan2(py - my, px - mx)
+            UpdateMinimapButtonPosition(SellAllGreyDB.minimapButtonAngle)
+        end)
+    end)
+
+    minimapButton:SetScript("OnDragStop", function(self)
+        self:SetScript("OnUpdate", nil)
+        self:UnlockHighlight()
+    end)
+
+    minimapButton:SetScript("OnMouseUp", function(self, button)
+        if button == "LeftButton" then
+            -- Toggle the addon
+            SellAllGreyDB.enabled = not SellAllGreyDB.enabled
+            local status = SellAllGreyDB.enabled and "|cff00ff00enabled|r" or "|cffff0000disabled|r"
+            print("|cffffff00SellAllGrey:|r Addon is now " .. status .. ".")
+        end
+    end)
+
+    minimapButton:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+        GameTooltip:AddLine("SellAllGrey")
+        GameTooltip:AddLine("Left-click to enable/disable the addon.", 1, 1, 1)
+        GameTooltip:Show()
+    end)
+
+    minimapButton:SetScript("OnLeave", function(self)
+        GameTooltip:Hide()
+    end)
+
+    -- Enable dragging
+    minimapButton:SetMovable(true)
+    minimapButton:EnableMouse(true)
+    minimapButton:RegisterForDrag("LeftButton")
+end
+
+-- Function to initialize the addon
+local function Initialize()
+    if not SellAllGreyDB then
+        SellAllGreyDB = {}
+    end
+    if SellAllGreyDB.enabled == nil then
+        SellAllGreyDB.enabled = true
+    end
+    if not SellAllGreyDB.minimapButtonAngle then
+        SellAllGreyDB.minimapButtonAngle = 0
+    end
+    -- Create the minimap button after initializing saved variables
+    CreateMinimapButton()
+end
+
+-- Slash Command Handler
+SLASH_SELLALLGREY1 = '/sellallgrey'
+SLASH_SELLALLGREY2 = '/sag'
+
+local function SlashCmdHandler(msg)
+    if msg == 'toggle' then
+        SellAllGreyDB.enabled = not SellAllGreyDB.enabled
+        local status = SellAllGreyDB.enabled and "|cff00ff00enabled|r" or "|cffff0000disabled|r"
+        print("|cffffff00SellAllGrey:|r Addon is now " .. status .. ".")
+    else
+        print("|cffffff00SellAllGrey:|r Usage: /sellallgrey toggle")
+    end
+end
+
+SlashCmdList["SELLALLGREY"] = SlashCmdHandler
+
 -- Event handler function
-local function OnEvent(self, event)
-    if event == "MERCHANT_SHOW" then
+local function OnEvent(self, event, ...)
+    if event == "ADDON_LOADED" and ... == "SellAllGrey" then
+        Initialize()
+    elseif event == "MERCHANT_SHOW" and SellAllGreyDB.enabled then
         SellGreyItems()
     end
 end
 
 -- Create frame and register events
 local frame = CreateFrame("Frame")
+frame:RegisterEvent("ADDON_LOADED")
 frame:RegisterEvent("MERCHANT_SHOW")
 frame:SetScript("OnEvent", OnEvent)
