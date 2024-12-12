@@ -1,8 +1,8 @@
-## Interface: 110002, 110005
+## Interface: 110005, 110007, 110002
 ## Title: SellAllGrey
 ## Notes: Automatically sells all grey items when interacting with a vendor.
 ## Author: VirtualOx
-## Version: 1.1.0
+## Version: 1.1.1
 ## SavedVariablesPerCharacter: SellAllGreyDB
 
 SellAllGrey.lua
